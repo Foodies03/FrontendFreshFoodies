@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ImageBackground } from "react-native";
 import Button from "../components/Button.js";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { makeHTTPRequest, createFridge } from '../utils/HttpUtils.js';
+import LgLogo from '../../assets/LgLogo.png';
 
 const LoginScreen = () => {
   const [userName, setUserName] = useState(null)
@@ -16,7 +17,6 @@ const LoginScreen = () => {
       return;
     }
 
-    // try to login with the given email
     console.log("making login request");
 
     var body = {
@@ -104,61 +104,62 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.page}>
-    <Text style={styles.title}>Login or Signup</Text>
-    <View style={styles.form}>
-      <TextInput
-        value={userName}
-        onChangeText={(userName) => setUserName(userName)}
-        placeholder={'Your Name'}
-        style={styles.input}
-      />
-      <TextInput
-        value={userEmail}
-        onChangeText={(userEmail) => setUserEmail(userEmail)}
-        placeholder={'Your Email'}
-        style={styles.input}
-      />
-      <View style={styles.buttonFlex}>
-        <Button
-          onPress={sendLoginRequest}
-          title="Login"
-          color="#2FC6B7"
-          width={150}
+        <ImageBackground
+                  source={LgLogo}
+                  style={{width:"100%", height:80}}
         />
-        <View style={{ width: 20 }} />
-        <Button
-          onPress={sendSignupRequest}
-          title="Signup"
-          color="#2FC6B7"
-          width={150}
+      <View style={styles.form}>
+        <TextInput
+          value={userName}
+          onChangeText={(userName) => setUserName(userName)}
+          placeholder={'Username'}
+          marginTop={"50%"}
+          style={styles.input}
         />
-      </View>
-      <View style={styles.buttonFlex}>
-        <Button
-          onPress={loginDemoAccount}
-          title="Demo"
-          color="#2FC6B7"
-          width={150}
+        <TextInput
+          value={userEmail}
+          onChangeText={(userEmail) => setUserEmail(userEmail)}
+          placeholder={'Your Email'}
+          style={styles.input}
         />
-        <View style={{ width: 20 }} />
-        <Button
-          onPress={() => { navigation.navigate("Home") } }
-          title="Bypass"
-          color="#2FC6B7"
-          width={150}
-        />
+        <TouchableOpacity onPress={sendLoginRequest} style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <View>
+          <Text style={styles.signUpText}>
+            Don't have an account?{' '}
+            <TouchableOpacity onPress={sendSignupRequest}>
+              <Text style={styles.signUpLink}>Sign up</Text>
+            </TouchableOpacity>
+          </Text>
+        </View>
+        <View style={styles.buttonFlex}>
+          <Button
+            onPress={loginDemoAccount}
+            title="Demo"
+            color="#2FC6B7"
+            width={150}
+          />
+          <View style={{ width: 20 }} />
+          <Button
+            onPress={() => { navigation.navigate("Home") } }
+            title="Bypass"
+            color="#2FC6B7"
+            width={150}
+          />
+        </View>
       </View>
     </View>
-  </View>
   );
 };
 
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#2FC6B7",
+    backgroundColor: "#1CC16A",
+    paddingTop: "50%",
   },
   title: {
     color: "#FFFFFF",
@@ -170,22 +171,50 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "87.5%",
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
+    justifyContent: "start",
+    backgroundColor: "#1CC16A",
+    paddingTop: 50,
   },
   input: {
-    width: 250,
-    height: 44,
+    width:"80%",
+    height:"8%",
     padding: 10,
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 5,
+    marginBottom: 5,
     backgroundColor: '#e8e8e8'
   },
   buttonFlex: {
     flexDirection:"row",
     justifyContent: "center",
-    marginTop: 10
-  }
+    marginTop: 60,
+  },
+  signUpText: {
+    color: "#FFFFFF",
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 5,
+  },
+  signUpLink: {
+    marginTop: 10,
+    color: "#FFFFFF",
+    textDecorationLine: 'underline',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 5,
+  },
+  button: {
+    width: "80%",
+    height: "8%",
+    backgroundColor: "#FFC531",
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default LoginScreen;
