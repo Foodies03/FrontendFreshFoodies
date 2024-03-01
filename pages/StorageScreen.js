@@ -34,19 +34,13 @@ const StorageScreen = (navigation) => {
           <TouchableOpacity style={{padding: '1%'}} onPress={() => setViewingOwnFridge(true)}>
             <Text style={viewingOwnFridge == true ? styles.textSelected : styles.textNotSelected}>My Fridge</Text>
           </TouchableOpacity>
-          {viewingOwnFridge == true ?
-            <ActiveIndicator style={{marginTop: '3%'}}/> :
-            null
-          }
+          {viewingOwnFridge && <ActiveIndicator style={{marginTop: '3%'}}/>}
         </View>
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity style={{padding: '1%'}} onPress={() => setViewingOwnFridge(false)}>
             <Text style={viewingOwnFridge == false ? styles.textSelected : styles.textNotSelected}>Everyone</Text>
           </TouchableOpacity>
-          {viewingOwnFridge == false ?
-            <ActiveIndicatorShared style={{marginTop: '3%'}}/> :
-            null
-          }
+          {!viewingOwnFridge && <ActiveIndicatorShared style={{marginTop: '3%'}}/>}
         </View>
       </View>
         <View style={styles.container}>
