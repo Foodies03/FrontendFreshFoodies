@@ -14,6 +14,7 @@ import OfferUp from "./pages/OfferUp";
 import CreateFridge from "./pages/CreateFridge.js";
 import DeleteSingleItemScreen from "./pages/DeleteSingleItemScreen.js";
 import JoinFridge from "./pages/JoinFridge.js";
+import StorageScreen from "./pages/StorageScreen.js";
 
 const Stack = createNativeStackNavigator();
 
