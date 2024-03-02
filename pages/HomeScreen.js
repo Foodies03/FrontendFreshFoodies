@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import InventoryScreen from './InventoryScreen';
 import StorageScreen from './StorageScreen';
@@ -6,9 +7,8 @@ import AnalyticsScreen from './AnalyticsScreen';
 import ScanReceiptScreen from "./ScanReceiptScreen";
 import LogoutScreen from "./LogoutScreen";
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-// import StorageScreen from "./StorageScreen";
 import Header from './Header';
-
+import InventoryNavigator from "./InventoryNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,10 +17,12 @@ const HomeScreen = () => {
 
   return (
     <>
-      <Header title="Home"/>
       <Tab.Navigator
         screenOptions={{
-          headerShown: false,
+          header: ({ navigation, route, options }) => {
+                const title = route.name;
+                return <Header title={title} />;
+            },
           tabBarStyle: {
             backgroundColor: '#F8F8F8',
             borderTopWidth: 2
@@ -29,9 +31,9 @@ const HomeScreen = () => {
           tabBarInactiveTintColor: 'black',
         }}
         >
-        {/* <Tab.Screen
+        <Tab.Screen
           name="Storage"
-          component={StorageScreen}
+          component={InventoryNavigator}
           options={{
             tabBarLabel: '',
             tabBarShowLabel: false,
@@ -40,7 +42,7 @@ const HomeScreen = () => {
             ),
           }}
           initialParams={{}}
-        /> */}
+        />
         <Tab.Screen
           name="Scanner"
           component={ScanReceiptScreen}
@@ -76,53 +78,6 @@ const HomeScreen = () => {
         />
       </Tab.Navigator>
     </>
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#F8F8F8',
-          borderTopWidth: 2
-        },
-        tabBarActiveTintColor: '#2FC6B7',
-        tabBarInactiveTintColor: 'black',
-      }}
-    >
-      <Tab.Screen
-        name="Storage"
-        component={StorageScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarShowLabel: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={35} />
-          ),
-        }}
-        initialParams={{}}
-      />
-      <Tab.Screen
-        name="Scanner"
-        component={ScanReceiptScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarShowLabel: false,
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="camera-outline" color={color} size={35} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Logout"
-        component={LogoutScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarShowLabel: false,
-          tabBarIcon: ({ color }) => (
-            <FontAwesome5 name="user" color={color} size={30} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
   );
 }
 

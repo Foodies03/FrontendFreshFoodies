@@ -1,11 +1,14 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 function Header({ title }) {
+    const nav = useNavigation();
+
     return (
         <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={() => handleNavigation()}>
+            <TouchableOpacity onPress={() => nav.goBack()}>
                 <Ionicons name="arrow-back" size={40} color="black" />
             </TouchableOpacity>
             <Text style={styles.title}>{title}</Text>

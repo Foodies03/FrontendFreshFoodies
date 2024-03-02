@@ -14,7 +14,7 @@ const StorageButton = (props) => {
 
     return (
         <View style={styles.framePersonal}>
-            <TouchableOpacity style={[styles.button, {borderColor: secondary}]} onPress={() => handlePress(1)}>
+            <TouchableOpacity style={[styles.button, {borderColor: secondary}]} onPress={props.handlePress}>
                 <MaterialCommunityIcons color={primary} size={120} name={iconName}></MaterialCommunityIcons>
                 <Text style={{color: primary, fontWeight: '900', fontSize: '30px'}}>{props.section}</Text>
             </TouchableOpacity>

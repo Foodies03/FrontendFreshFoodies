@@ -5,7 +5,7 @@ import { PieChart, BarChart } from 'react-native-chart-kit';
 
 const AnalyticsScreen = (navigation) => {
   const nav = useNavigation();
-  
+
   // Sample data for food waste
   const foodWasteData = [
     { name: 'Meat', percentage: 20, color: '#FF0000' },
@@ -33,7 +33,6 @@ const AnalyticsScreen = (navigation) => {
 
   return (
     <View style={styles.page}>
-      <Text style={styles.title}>Analytics</Text>
       <View style={styles.container}>
         {/* Cylinder */}
         <View style={[styles.cylinder, styles.cylinderContainer]}>
@@ -86,7 +85,7 @@ const AnalyticsScreen = (navigation) => {
             }}
             style={styles.barChart}
             fromZero={true}
-            
+
           />
         </View>
 

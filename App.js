@@ -15,6 +15,8 @@ import CreateFridge from "./pages/CreateFridge.js";
 import DeleteSingleItemScreen from "./pages/DeleteSingleItemScreen.js";
 import JoinFridge from "./pages/JoinFridge.js";
 import StorageScreen from "./pages/StorageScreen.js";
+import InventoryScreen from "./pages/InventoryScreen.js";
+import Header from "./pages/Header.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,7 +42,14 @@ const App = () => {
       {!statusKeyLoaded && <Text style={styles.title}>LOADING</Text>}
       {statusKeyLoaded && (
         <NavigationContainer style={styles.image}>
-          <Stack.Navigator initialRouteName={initialRouteName}>
+          <Stack.Navigator initialRouteName={initialRouteName}
+            screenOptions={{
+              header: ({ navigation, route, options }) => {
+                const title = route.name;
+                return <Header title={title} />;
+            }
+          }}
+          >
             <Stack.Screen
               name="Login"
               component={LoginScreen}

@@ -12,8 +12,8 @@ import BackgroundPersonal from '../assets/background/background_personal.svg'
 import BackgroundShared from '../assets/background/background_shared.svg'
 import ActiveIndicator from '../assets/storage/active_indicator.svg'
 import ActiveIndicatorShared from '../assets/storage/active_indicator_shared.svg'
-import FridgeButton from '../assets/storage/fridge_button.svg'
 import StorageButton from "./components/StorageButton.js";
+import InventoryScreen from "./InventoryScreen.js";
 
 const StorageScreen = (navigation) => {
   const nav = useNavigation();
@@ -22,40 +22,37 @@ const StorageScreen = (navigation) => {
   const location = ["Fridge", "Freezer", "Pantry", "Cabinet"];
 
   return (
-    <View style={styles.page}>
-      <Text style={styles.title}>Storage</Text>
-      <View style={styles.form}>
-        <View style={styles.searchContainer}>
-            <MaterialCommunityIcons color='#718482' name='magnify' size='20' style={{marginLeft: '4%'}}></MaterialCommunityIcons>
-            <TextInput style={styles.input} value={searchTerm} placeholder="Search"></TextInput>
+    <View style={styles.form}>
+      <View style={styles.searchContainer}>
+          <MaterialCommunityIcons color='#718482' name='magnify' size='20' style={{marginLeft: '4%'}}></MaterialCommunityIcons>
+          <TextInput style={styles.input} value={searchTerm} placeholder="Search"></TextInput>
+    </View>
+    <View style={styles.viewSelector}>
+      <View style={{alignItems: 'center'}}>
+        <TouchableOpacity style={{padding: '1%'}} onPress={() => setViewingOwnFridge(true)}>
+          <Text style={viewingOwnFridge == true ? styles.textSelected : styles.textNotSelected}>My Fridge</Text>
+        </TouchableOpacity>
+        {viewingOwnFridge && <ActiveIndicator style={{marginTop: '3%'}}/>}
       </View>
-      <View style={styles.viewSelector}>
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity style={{padding: '1%'}} onPress={() => setViewingOwnFridge(true)}>
-            <Text style={viewingOwnFridge == true ? styles.textSelected : styles.textNotSelected}>My Fridge</Text>
-          </TouchableOpacity>
-          {viewingOwnFridge && <ActiveIndicator style={{marginTop: '3%'}}/>}
-        </View>
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity style={{padding: '1%'}} onPress={() => setViewingOwnFridge(false)}>
-            <Text style={viewingOwnFridge == false ? styles.textSelected : styles.textNotSelected}>Everyone</Text>
-          </TouchableOpacity>
-          {!viewingOwnFridge && <ActiveIndicatorShared style={{marginTop: '3%'}}/>}
-        </View>
+      <View style={{alignItems: 'center'}}>
+        <TouchableOpacity style={{padding: '1%'}} onPress={() => setViewingOwnFridge(false)}>
+          <Text style={viewingOwnFridge == false ? styles.textSelected : styles.textNotSelected}>Everyone</Text>
+        </TouchableOpacity>
+        {!viewingOwnFridge && <ActiveIndicatorShared style={{marginTop: '3%'}}/>}
       </View>
-        <View style={styles.container}>
-          {viewingOwnFridge == true ?
-            <BackgroundPersonal style={styles.background}/> :
-            <BackgroundShared style={styles.background}/>
-          }
-          <View style={styles.row}>
-              <StorageButton section='FRIDGE' personal={viewingOwnFridge}></StorageButton>
-              <StorageButton section='FREEZER' personal={viewingOwnFridge}></StorageButton>
-            </View>
-          <View style={styles.row}>
-              <StorageButton section='PANTRY' personal={viewingOwnFridge}></StorageButton>
-              <StorageButton section='CABINET' personal={viewingOwnFridge}></StorageButton>
+    </View>
+      <View style={styles.container}>
+        {viewingOwnFridge == true ?
+          <BackgroundPersonal style={styles.background}/> :
+          <BackgroundShared style={styles.background}/>
+        }
+        <View style={styles.row}>
+            <StorageButton handlePress={() => nav.navigate('Inventory', {section: 'fridge'})} section='FRIDGE' personal={viewingOwnFridge}></StorageButton>
+            <StorageButton section='FREEZER' personal={viewingOwnFridge}></StorageButton>
           </View>
+        <View style={styles.row}>
+            <StorageButton section='PANTRY' personal={viewingOwnFridge}></StorageButton>
+            <StorageButton section='CABINET' personal={viewingOwnFridge}></StorageButton>
         </View>
       </View>
     </View>
@@ -89,12 +86,6 @@ const styles = StyleSheet.create({
     top: "5%",
     zIndex: 100, // brings to front
   },
-  page: {
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "#2FC6B7",
-    flex: '1',
-  },
   title: {
     color: "#FFFFFF",
     fontWeight: "bold",
@@ -103,12 +94,10 @@ const styles = StyleSheet.create({
   },
   form: {
     width: "100%",
-    height: '87.5%',
+    height: '100%',
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
-    borderTopEndRadius: 35,
-    borderTopStartRadius: 35,
   },
   empty: {
     height: '2em'
