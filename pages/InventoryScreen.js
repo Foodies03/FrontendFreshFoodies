@@ -1,87 +1,105 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput } from 'react-native';
+import React, { useCallback } from "react";
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import StorageImage from '../assets/StorageTitle.png';
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+    getUserPersonalFridgeObject,
+    getUserFridgeIds,
+    addOrRemoveFoodFromFridge,
+  } from "./utils/HttpUtils.js";
+import InventoryItem from './components/InventoryItem.js'
 
-function InventoryScreen() {
+const InventoryScreen = (props) => {
+    const section = props.route.params.section;
+    const viewingOwnFridge = props.personal;
+    const [foods, setFoods] = React.useState([])
+    const navigation = useNavigation();
+    const [rerender, setRerender] = React.useState([false])
+
+    useFocusEffect(
+        useCallback(() => {
+          getUserPersonalFridgeObject().then((obj) => {
+            const foods = obj.foods;
+            // this is the food object, and is an array of object like this:
+            // {"category":"produce","location":"fridge","name":"apple","quantity":1,"slug":"apple"}
+            const filteredItems = foods.filter(item => item.location == section)
+            console.log(filteredItems)
+            setFoods(filteredItems);
+            setRerender(false);
+          });
+        },[navigation?.route?.params?.newData, rerender])
+      );
+
+    const handleRemove = async (item) => {
+        console.log('removing ' + item.name)
+        const fridgeIds = await getUserFridgeIds();
+        await addOrRemoveFoodFromFridge(fridgeIds[0], [item], "remove");
+        console.log('printing item ' + item.id)
+        setRerender(true)
+    }
+
     return (
         <View style={{ flex: 1, flexDirection: 'column' }}>
-            <View style={styles.searchContainer}>
-                <Ionicons name="search-outline" size={24} color="black" style={styles.searchIcon} />
-                <TextInput
-                    style={styles.searchBar}
-                    placeholder="Search all"
-                    placeholderTextColor="#888"
-                />
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>{section}</Text>
             </View>
+                <View style={styles.searchContainer}>
+                    <Ionicons name="search-outline" size={24} color="black" style={styles.searchIcon} />
+                    <TextInput
+                        style={styles.searchBar}
+                        placeholderf="Search all"
+                        placeholderTextColor="#888"
+                    />
+                </View>
+                <ScrollView >
+                    <View>
+                        <ImageBackground
+                            source={StorageImage}
+                            style={{width:"100%", height:60}}
+                            resizeMode="cover"
+                        >
+                            <Text style={styles.storageText}>Fruit</Text>
+                        </ImageBackground>
 
-            <InventoryContent />
+                        <View style={styles.headerRow}>
+                            <Text style={styles.headerText}>Food</Text>
+                            <Text style={styles.headerText}>Amount</Text>
+                            <Text style={styles.headerText}>Expiration</Text>
+                            <Text style={styles.headerText}>Action</Text>
+                        </View>
+                        {foods.map((item, index) => {
+                            return <InventoryItem removeItem={async () => {
+                                await handleRemove(item);
+                            }} name={item.name} amount={item.quantity} expiration={item.expiration_date}/>
+                        })}
 
-            <TouchableOpacity style={styles.addItemButton}>
-                <Text style={styles.addItemButtonText}>Add Item</Text>
-            </TouchableOpacity>
+                        <ImageBackground
+                            source={StorageImage}
+                            style={{width:"100%", height:60}}
+                            resizeMode="cover"
+                        >
+                            <Text style={styles.storageText}>Pantry</Text>
+                        </ImageBackground>
+
+                        <View style={styles.headerRow}>
+                            <Text style={styles.headerText}>Food</Text>
+                            <Text style={styles.headerText}>Amount</Text>
+                            <Text style={styles.headerText}>Expiration</Text>
+                            <Text style={styles.headerText}>Action</Text>
+                        </View>
+                        {/* {foods.map((item, index) => {
+                            renderInventoryItem(item.name, item.quantity, item.expiration_date)
+                        })} */}
+                    </View>
+                </ScrollView>
+                <TouchableOpacity style={styles.addItemButton} onPress={() => navigation.navigate("Manual")}>
+                    <Text style={styles.addItemButtonText}>Add Item</Text>
+                </TouchableOpacity>
         </View>
     );
 }
 
-function InventoryContent() {
-    return (
-        <View>
-            <ImageBackground
-                source={StorageImage}
-                style={{width:"100%", height:60}}
-                resizeMode="cover"
-            >
-                <Text style={styles.storageText}>Fruit</Text>
-            </ImageBackground>
-
-            <View style={styles.headerRow}>
-                <Text style={styles.headerText}>Food</Text>
-                <Text style={styles.headerText}>Amount</Text>
-                <Text style={styles.headerText}>Expiration</Text>
-                <Text style={styles.headerText}>Action</Text>
-            </View>
-
-            {renderInventoryItem('Apple', '5', '2024-03-10')}
-            {renderInventoryItem('Banana', '3', '2024-03-15')}
-            {renderInventoryItem('Orange', '4', '2024-03-12')}
-            {renderInventoryItem('Grapes', '2', '2024-03-18')}
-
-            <ImageBackground
-                source={StorageImage}
-                style={{width:"100%", height:60}}
-                resizeMode="cover"
-            >
-                <Text style={styles.storageText}>Pantry</Text>
-            </ImageBackground>
-
-            <View style={styles.headerRow}>
-                <Text style={styles.headerText}>Food</Text>
-                <Text style={styles.headerText}>Amount</Text>
-                <Text style={styles.headerText}>Expiration</Text>
-                <Text style={styles.headerText}>Action</Text>
-            </View>
-
-            {renderInventoryItem('Apple', '5', '2024-03-10')}
-            {renderInventoryItem('Banana', '3', '2024-03-15')}
-            {renderInventoryItem('Orange', '4', '2024-03-12')}
-            {renderInventoryItem('Grapes', '2', '2024-03-18')}
-        </View>
-    );
-}
-
-function renderInventoryItem(food, amount, expiration) {
-    return (
-        <View style={styles.inventoryItem}>
-            <Text style={styles.inventoryItemText}>{food}</Text>
-            <Text style={styles.inventoryItemText}>{amount}</Text>
-            <Text style={styles.inventoryItemText}>{expiration}</Text>
-            <TouchableOpacity style={styles.actionButton}>
-                <Ionicons name="ellipsis-horizontal" size={24} color="black" />
-            </TouchableOpacity>
-        </View>
-    );
-}
 
 const styles = StyleSheet.create({
     storageText: {
@@ -114,6 +132,9 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'center',
     },
+    expiredInventoryItemText: {
+        color: 'red'
+    },
     actionButton: {
         flex: 1,
         alignItems: 'center',
@@ -124,7 +145,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         alignSelf: 'center',
-        marginTop: 20,
+        marginTop: 15,
         elevation: 5,
         shadowColor: '#000',
         shadowOffset: {
@@ -133,6 +154,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
+        marginBottom: 15
     },
     addItemButtonText: {
         color: 'white',
@@ -154,6 +176,15 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 40,
     },
+    title: {
+        alignSelf: 'center',
+        fontWeight: '600',
+        fontSize: '20px'
+    },
+    titleContainer: {
+        alignItems: 'center',
+        paddingTop: '3%'
+    }
 });
 
 export default InventoryScreen;

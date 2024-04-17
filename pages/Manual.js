@@ -75,7 +75,7 @@ function Manual(props) {
       return;
     }
 
-    console.log("lsdkjfhkjsdhjklfhjklsdjkl: date " + date);
+    console.log("lsdkjfhkjsdhjklfhjklsdjkl: date " + date.toLocaleDateString());
 
     let foodToAdd = JSON.stringify([
       {
@@ -148,8 +148,8 @@ function Manual(props) {
         minimumDate={date}
         confirmBtnText="confirm"
         cancelBtnText="cancel"
-        onDateChange={(date) => {
-          setDate(date);
+        onDateChange={(newDate) => {
+          setDate(newDate);
         }}
         style={{
           width: "100%",

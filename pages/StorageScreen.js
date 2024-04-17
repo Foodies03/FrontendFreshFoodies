@@ -5,6 +5,7 @@ import {
   getUserPersonalFridgeObject,
   getUserFridgeIds,
   addOrRemoveFoodFromFridge,
+  getUserSharedFridgeObject
 } from "./utils/HttpUtils.js";
 import {colors} from "./consants.js"
 import {MaterialCommunityIcons} from '@expo/vector-icons'
@@ -19,7 +20,22 @@ const StorageScreen = (navigation) => {
   const nav = useNavigation();
   const [searchTerm, setSearchTerm] = React.useState()
   const [viewingOwnFridge, setViewingOwnFridge] = React.useState(true)
+  const [hasSharedFridge, setHasSharedFridge] = React.useState()
   const location = ["Fridge", "Freezer", "Pantry", "Cabinet"];
+  const [rerender, setRerender] = React.useState(false)
+
+  useFocusEffect(
+    useCallback(() => {
+      getUserSharedFridgeObject().then((obj) => {
+        console.log('shared obj: ' + obj);
+        if(obj == 'NO SHARED FRIDGE') {
+          setHasSharedFridge(false)
+        } else {
+          setHasSharedFridge(true)
+        }
+      })
+    },[navigation?.route?.params?.newData, rerender])
+  );
 
   return (
     <View style={styles.form}>
@@ -41,13 +57,13 @@ const StorageScreen = (navigation) => {
         {!viewingOwnFridge && <ActiveIndicatorShared style={{marginTop: '3%'}}/>}
       </View>
     </View>
-      <View style={styles.container}>
+      {(viewingOwnFridge || (!viewingOwnFridge && hasSharedFridge)) && <View style={styles.container}>
         {viewingOwnFridge == true ?
           <BackgroundPersonal style={styles.background}/> :
           <BackgroundShared style={styles.background}/>
         }
         <View style={styles.row}>
-            <StorageButton handlePress={() => nav.navigate('Inventory', {section: 'fridge'})} section='FRIDGE' personal={viewingOwnFridge}></StorageButton>
+            <StorageButton handlePress={() => nav.navigate('Inventory', {section: 'Fridge', personal: viewingOwnFridge})} section='FRIDGE' personal={viewingOwnFridge}></StorageButton>
             <StorageButton section='FREEZER' personal={viewingOwnFridge}></StorageButton>
           </View>
         <View style={styles.row}>
@@ -55,6 +71,7 @@ const StorageScreen = (navigation) => {
             <StorageButton section='CABINET' personal={viewingOwnFridge}></StorageButton>
         </View>
       </View>
+      }
     </View>
   );
 };
