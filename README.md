@@ -14,7 +14,7 @@ flask run
 
 You will need to set up a new MongoDB cluster and download [MongoDB Compass](https://www.mongodb.com/products/compass). References to the MongoDB cluster link will need to be changed throughout the backend repository.
 
-In addition, you will need to set up a new Heroku account and [deploy this Flask app to Heroku](https://realpython.com/flask-by-example-part-1-project-setup/). The ideal set up is to have changes to the main production branch automatically update the Heroku branch.
+In addition, you will need to set up a new Heroku account (or your choice of deployment platform) and [deploy this Flask app to Heroku](https://realpython.com/flask-by-example-part-1-project-setup/). The ideal set up is to have changes to the main production branch automatically update the Heroku branch.
 
 
 ## Frontend
@@ -27,7 +27,7 @@ Run expo frontend with
 npm start
 ```
 
-Any references to the old Heroku backend API will need to be switched to your new Heroku link throughout the frontend repository.
+Any references to the old backend API will need to be switched to your new API link in the .env file.
 
 ### Other Links
 
