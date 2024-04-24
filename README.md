@@ -4,7 +4,7 @@ In order to continue development of this project, two repositories will need to 
 
 ## Backend
 
-[Backend Repo](https://github.com/FreshFoodies/FreshFoodies)
+[Backend Repo](https://github.com/Foodies03/FreshFoodies)
 
 
 Run flask backend with
