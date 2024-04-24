@@ -19,8 +19,7 @@ In addition, you will need to set up a new Heroku account (or your choice of dep
 
 ## Frontend
 
-[Frontend Repo](https://github.com/FreshFoodies/FreshFoodies)
-
+[Frontend Repo](https://github.com/Foodies03/FrontendFreshFoodies)
 
 Run expo frontend with
 ```
