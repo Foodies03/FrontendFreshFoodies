@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import StorageImage from '../assets/StorageTitle.png';
@@ -7,27 +7,60 @@ import {
     getUserPersonalFridgeObject,
     getUserFridgeIds,
     addOrRemoveFoodFromFridge,
+    getUserSharedFridgeObject,
   } from "./utils/HttpUtils.js";
 import InventoryItem from './components/InventoryItem.js'
+import ActionModal from "./components/ActionModal.js";
 
 const InventoryScreen = (props) => {
     const section = props.route.params.section;
-    const viewingOwnFridge = props.personal;
+    const viewingOwnFridge = props.route.params.personal;
     const [foods, setFoods] = React.useState([])
     const navigation = useNavigation();
     const [rerender, setRerender] = React.useState([false])
+    const [editing, setEditing] = React.useState([false])
+    const [currItem, setCurrItem] = React.useState({})
+    const [fridgeID, setFridgeID] = React.useState()
+
+    useEffect(() => {
+        console.log('viewing own fridge: ' + viewingOwnFridge)
+        console.log('section: ' + section)
+       const setId = async () => {
+        try {
+            const fridgeIds = await getUserFridgeIds()
+            viewingOwnFridge ? setFridgeID(fridgeIds[0]) : setFridgeID(fridgeIds[1])
+            console.log(fridgeID)
+        } catch {
+            console.log('failed to get fridge ids')
+        }
+       }
+
+       setId()
+    }, [])
 
     useFocusEffect(
         useCallback(() => {
-          getUserPersonalFridgeObject().then((obj) => {
-            const foods = obj.foods;
-            // this is the food object, and is an array of object like this:
-            // {"category":"produce","location":"fridge","name":"apple","quantity":1,"slug":"apple"}
-            const filteredItems = foods.filter(item => item.location == section)
-            console.log(filteredItems)
-            setFoods(filteredItems);
-            setRerender(false);
-          });
+          if (viewingOwnFridge) {
+            getUserPersonalFridgeObject().then((obj) => {
+                const foods = obj.foods;
+                // this is the food object, and is an array of object like this:
+                // {"category":"produce","location":"fridge","name":"apple","quantity":1,"slug":"apple"}
+                const filteredItems = foods.filter(item => item.location == section)
+                console.log(filteredItems)
+                setFoods(filteredItems);
+                setRerender(false);
+              });
+          } else {
+            getUserSharedFridgeObject().then((obj) => {
+                const foods = obj.foods;
+                // this is the food object, and is an array of object like this:
+                // {"category":"produce","location":"fridge","name":"apple","quantity":1,"slug":"apple"}
+                const filteredItems = foods.filter(item => item.location == section)
+                console.log(filteredItems)
+                setFoods(filteredItems);
+                setRerender(false);
+              });
+          }
         },[navigation?.route?.params?.newData, rerender])
       );
 
@@ -69,11 +102,11 @@ const InventoryScreen = (props) => {
                             <Text style={styles.headerText}>Action</Text>
                         </View>
                         {foods.map((item, index) => {
-                            return <InventoryItem removeItem={async () => {
-                                await handleRemove(item);
+                            return <InventoryItem onPress={() => {
+                                setEditing(true)
+                                setCurrItem(item)
                             }} name={item.name} amount={item.quantity} expiration={item.expiration_date}/>
                         })}
-
                         <ImageBackground
                             source={StorageImage}
                             style={{width:"100%", height:60}}
@@ -96,6 +129,7 @@ const InventoryScreen = (props) => {
                 <TouchableOpacity style={styles.addItemButton} onPress={() => navigation.navigate("Manual")}>
                     <Text style={styles.addItemButtonText}>Add Item</Text>
                 </TouchableOpacity>
+                <ActionModal handleRender={setRerender} item={currItem} visible={editing} toggleModal={() => setEditing(false)} fridgeID={fridgeID}/>
         </View>
     );
 }
@@ -179,7 +213,7 @@ const styles = StyleSheet.create({
     title: {
         alignSelf: 'center',
         fontWeight: '600',
-        fontSize: '20px'
+        fontSize: 20
     },
     titleContainer: {
         alignItems: 'center',

@@ -97,10 +97,10 @@ const ProcessReceiptPhotoScreen = ({ route }) => {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [categoryValue, setCategoryValue] = useState(null);
   const [categoryItems, setCategoryItems] = useState([
-    { label: "Produce", value: "Produce" },
+    { label: "Vegetable", value: "Vegetable" },
+    { label: "Fruit", value: "Fruit" },
     { label: "Meat", value: "Meat" },
-    { label: "Dairy", value: "Dairy" },
-    { label: "Grain", value: "Grain" },
+    { label: "Other", value: "Other" }
   ]);
 
   const [currId, setCurrId] = useState(-1);

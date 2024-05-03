@@ -40,7 +40,7 @@ const StorageScreen = (navigation) => {
   return (
     <View style={styles.form}>
       <View style={styles.searchContainer}>
-          <MaterialCommunityIcons color='#718482' name='magnify' size='20' style={{marginLeft: '4%'}}></MaterialCommunityIcons>
+          <MaterialCommunityIcons color='#718482' name='magnify' size={20} style={{marginLeft: '4%'}}></MaterialCommunityIcons>
           <TextInput style={styles.input} value={searchTerm} placeholder="Search"></TextInput>
     </View>
     <View style={styles.viewSelector}>
