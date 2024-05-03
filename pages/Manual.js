@@ -6,6 +6,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +17,7 @@ function Manual(props) {
   const [name, setName] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [date, setDate] = useState(new Date());
+  const [cost, setCost] = useState(null)
 
   const [locationOpen, setlocationOpen] = useState(false);
   const [locationValue, setlocationValue] = useState(null);
@@ -28,10 +31,9 @@ function Manual(props) {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [categoryValue, setCategoryValue] = useState(null);
   const [categoryItems, setCategoryItems] = useState([
-    { label: "Produce", value: "Produce" },
+    { label: "Vegetable", value: "Vegetable" },
+    { label: "Fruit", value: "Fruit" },
     { label: "Meat", value: "Meat" },
-    { label: "Dairy", value: "Dairy" },
-    { lavel: "Grain", value: "Grain" },
     { label: "Other", value: "Other" },
   ]);
 
@@ -85,6 +87,7 @@ function Manual(props) {
         quantity: quantity,
         location: locationValue,
         category: categoryValue,
+        cost_per_unit: cost
       },
     ]);
 
@@ -114,107 +117,117 @@ function Manual(props) {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.btn2} onPress={handleBackBtn}>
-        <Text style={styles.text}>Back</Text>
-      </TouchableOpacity>
-      <Text style={styles.formTitle}>Add Item</Text>
-      <Text style={styles.form}>Food Name:</Text>
-      <TextInput
-        editable
-        maxLength={40}
-        value={name}
-        placeholder="Enter a food name"
-        onChangeText={setName}
-        autoCapitalize="none"
-        style={styles.textInput}
-      />
-      <Text style={styles.form}>Quantity:</Text>
-      <TextInput
-        editable
-        maxLength={2}
-        value={quantity}
-        placeholder="Enter quantity"
-        onChangeText={setQuantity}
-        style={styles.textInput}
-        keyboardType="numeric"
-      />
-      <Text style={styles.form}>Expiration Date:</Text>
-      <DateTimePicker
-        value={date}
-        mode="date" //The enum of date, datetime and time
-        placeholder="Select date"
-        dateFormat="YYYY-MM-DD"
-        minimumDate={date}
-        confirmBtnText="confirm"
-        cancelBtnText="cancel"
-        onDateChange={(newDate) => {
-          setDate(newDate);
-        }}
-        style={{
-          width: "100%",
-          // backgroundColor: 'white'
-        }}
-        customStyles={{
-          dateInput: {
-            paddingLeft: 5,
-            alignItems: "flex-start",
-            borderRadius: 10,
-            height: "100%",
-            borderColor: "grey",
-          },
-        }}
-      />
-      <Text style={styles.form}>Category</Text>
-      <View style={styles.dropdownCtner1}>
-        <DropDownPicker
-          open={categoryOpen}
-          value={categoryValue}
-          items={categoryItems}
-          setOpen={setCategoryOpen}
-          setValue={setCategoryValue}
-          setcategoryItems={setCategoryItems}
-          placeholder="Select category"
-          style={{
-            zIndex: 10,
-            position: "relative",
-            borderColor: "grey",
-            backgroundColor: "white",
-          }}
-          dropDownContainerStyle={{ zIndex: 3000 }}
-          itemStyle={{ color: "grey" }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.btn2} onPress={handleBackBtn}>
+          <Text style={styles.text}>Back</Text>
+        </TouchableOpacity>
+        <Text style={styles.formTitle}>Add Item</Text>
+        <Text style={styles.form}>Food Name:</Text>
+        <TextInput
+          editable
+          maxLength={40}
+          value={name}
+          placeholder="Enter a food name"
+          onChangeText={setName}
+          autoCapitalize="none"
+          style={styles.textInput}
         />
-      </View>
-      <Text style={styles.form}>Location</Text>
-      <View style={styles.dropdownCtner2}>
-        <DropDownPicker
-          open={locationOpen}
-          value={locationValue}
-          items={locationItems}
-          setOpen={setlocationOpen}
-          setValue={setlocationValue}
-          setcategoryItems={setlocationItems}
-          placeholder="Select location"
-          style={{
-            zIndex: 0,
-            position: "relative",
-            borderColor: "grey",
-            backgroundColor: "white",
-          }}
-          dropDownContainerStyle={{ zIndex: 0 }}
+        <Text style={styles.form}>Quantity:</Text>
+        <TextInput
+          editable
+          maxLength={2}
+          value={quantity}
+          placeholder="Enter quantity"
+          onChangeText={setQuantity}
+          style={styles.textInput}
+          keyboardType="numeric"
         />
+        <Text style={styles.form}>Cost Per Unit (Cents):</Text>
+        <TextInput
+          editable
+          maxLength={3}
+          value={cost}
+          placeholder="Enter cost per unit"
+          onChangeText={setCost}
+          style={styles.textInput}
+          keyboardType="numeric"
+      />
+        <Text style={styles.form}>Expiration Date:</Text>
+        <DateTimePicker
+          value={date}
+          mode="date" //The enum of date, datetime and time
+          placeholder="Select date"
+          dateFormat="YYYY-MM-DD"
+          minimumDate={date}
+          confirmBtnText="confirm"
+          cancelBtnText="cancel"
+          onDateChange={(newDate) => {
+            setDate(newDate);
+          }}
+          style={{
+            width: "100%",
+            // backgroundColor: 'white'
+          }}
+          customStyles={{
+            dateInput: {
+              paddingLeft: 5,
+              alignItems: "flex-start",
+              borderRadius: 10,
+              height: "100%",
+              borderColor: "grey",
+            },
+          }}
+        />
+        <Text style={styles.form}>Category</Text>
+        <View style={categoryOpen && {'zIndex': 1}}>
+          <DropDownPicker
+            open={categoryOpen}
+            value={categoryValue}
+            items={categoryItems}
+            setOpen={setCategoryOpen}
+            setValue={setCategoryValue}
+            setcategoryItems={setCategoryItems}
+            placeholder="Select category"
+            zIndex={100}
+            dropDownContainerStyle={{zIndex: '100'}}
+            style={{
+              position: "relative",
+              borderColor: "grey",
+              backgroundColor: "white",
+            }}
+            itemStyle={{ color: "grey" }}
+          />
+        </View>
+        <Text style={styles.form}>Location</Text>
+        <View style={styles.dropdownCtner2}>
+          <DropDownPicker
+            open={locationOpen}
+            value={locationValue}
+            items={locationItems}
+            setOpen={setlocationOpen}
+            setValue={setlocationValue}
+            setcategoryItems={setlocationItems}
+            placeholder="Select location"
+            style={{
+              position: "relative",
+              borderColor: "grey",
+              backgroundColor: "white",
+            }}
+          />
+        </View>
+        <TouchableOpacity style={styles.btn} onPress={onPress}>
+          <Text style={styles.text}>{title}</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.btn} onPress={onPress}>
-        <Text style={styles.text}>{title}</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     padding: "10%",
     backgroundColor: "white",
   },
@@ -222,6 +235,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     textAlign: "center",
+    top: -35
   },
   form: {
     fontSize: 20,
@@ -236,12 +250,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: "grey",
     backgroundColor: "white",
-  },
-  dropdownCtner1: {
-    zIndex: 3000,
-  },
-  dropdownCtner2: {
-    zIndex: 2000,
   },
   btn: {
     backgroundColor: "#2FC6B7",
@@ -259,8 +267,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     padding: 10,
     margin: 20,
-    top: 75,
-    left: 25,
+    top: 50,
+    left: 5,
   },
   text: {
     fontSize: 20,
