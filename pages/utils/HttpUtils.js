@@ -85,6 +85,53 @@ export const getUserSharedFridgeObject = async () => {
     return response;
 }
 
+export const getEntries = async ( timeFrame ) => {
+  const date = new Date()
+  date.setDate(date.getDate() - timeFrame)
+  console.log(date)
+
+  var requestOptions = {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "email" : await AsyncStorage.getItem("user_email"),
+      "time_frame" : date
+    })
+  }
+
+  var response = await makeHTTPRequest(requestOptions, process.env.EXPO_PUBLIC_API_BASE_URL + "api/user/entries");
+  if (response === null) {
+    alert("failed to get entries")
+    return;
+  }
+
+  console.log("sucessfully recieved entries")
+  return response
+}
+
+export const addEntry = async ( entryDetails ) => {
+  var requestOptions = {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "email" : await AsyncStorage.getItem("user_email"),
+      "entry_details" : entryDetails
+    })
+  };
+
+  var response = await makeHTTPRequest(requestOptions, process.env.EXPO_PUBLIC_API_BASE_URL + "api/user/add_entry");
+  if (response === null) {
+    alert("failed to add entry.")
+    return;
+  }
+  console.log("api/user/add_entry response: " + JSON.stringify(response));
+  return response
+}
+
 export const addOrRemoveFoodFromFridge = async (fridgeId, foodArray, action) => {
   var requestOptions = {
     method: 'PUT',

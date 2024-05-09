@@ -17,22 +17,9 @@ const InventoryItem = (props) => {
             <Text style={[styles.inventoryItemText, expired && styles.expiredInventoryItemText]}>{props.amount}</Text>
             <Text style={[styles.inventoryItemText, expired && styles.expiredInventoryItemText]}>{new Date(props.expiration).toLocaleDateString()}</Text>
             {!viewingAction &&
-                <TouchableOpacity style={styles.actionButton} onPress={() => setViewingAction(true)}>
+                <TouchableOpacity style={styles.actionButton} onPress={props.onPress}>
                     <Ionicons name="ellipsis-horizontal" size={24} color="black" />
                 </TouchableOpacity>
-            }
-            {viewingAction &&
-                <View style={styles.actionContainer}>
-                    <TouchableOpacity onPress={() => setViewingAction(false)}>
-                        <MaterialCommunityIcons name='pencil' size={24} color='black'/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{backgroundColor: '#FFC531', borderRadius: '50%'}} onPress={() => setViewingAction(false)}>
-                        <MaterialCommunityIcons name='share-all' size={24} color='black'/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{backgroundColor: 'red', borderRadius: '50%'}} onPress={() => props.removeItem}>
-                        <MaterialCommunityIcons name='delete-forever' size={24} color='black'/>
-                    </TouchableOpacity>
-                </View>
             }
         </View>
     );
