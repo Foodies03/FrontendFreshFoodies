@@ -40,7 +40,7 @@ const StorageScreen = (navigation) => {
   return (
     <View style={styles.form}>
       <View style={styles.searchContainer}>
-          <MaterialCommunityIcons color='#718482' name='magnify' size='20' style={{marginLeft: '4%'}}></MaterialCommunityIcons>
+          <MaterialCommunityIcons color='#718482' name='magnify' size={20} style={{marginLeft: '4%'}}></MaterialCommunityIcons>
           <TextInput style={styles.input} value={searchTerm} placeholder="Search"></TextInput>
     </View>
     <View style={styles.viewSelector}>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white', // Background color of the button
     borderColor: colors.secondary,
     borderStyle: 'solid',
-    borderWidth: '2x',
+    borderWidth: 2,
     padding: 20, // Padding inside the button to increase tap area
     alignItems: 'center', // Center the text inside the button
     margin: 10, // Margin around the button to ensure there's space between them
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.primary,
-    fontSize: '24px',
+    fontSize: 24,
     fontWeight: '800'
   },
   input: {
@@ -151,11 +151,11 @@ const styles = StyleSheet.create({
     marginBottom: '1%'
   },
   textSelected: {
-    fontSize: '18px',
+    fontSize: 18,
     fontWeight: '600'
   },
   textNotSelected: {
-    fontSize: '18px',
+    fontSize: 18,
     color: '#00000066'
   },
   background: {
@@ -172,11 +172,11 @@ const styles = StyleSheet.create({
     height: '5%',
     justifyContent: 'center',
     borderStyle: 'solid',
-    borderWidth: '1px',
+    borderWidth: 1,
     marginTop: '5%',
     paddingRight: '5%',
     borderColor: '#718482'
   }
-});
+})
 
-export default StorageScreen;
+export default StorageScreen
