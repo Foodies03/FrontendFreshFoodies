@@ -62,7 +62,7 @@ const InventoryScreen = (props) => {
               });
           }
         },[navigation?.route?.params?.newData, rerender])
-      );
+    );
 
     const handleRemove = async (item) => {
         console.log('removing ' + item.name)

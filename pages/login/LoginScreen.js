@@ -20,6 +20,7 @@ const LoginScreen = () => {
     console.log("making login request");
 
     var body = {
+      name: userName.toLowerCase(),
       email: userEmail.toLowerCase()
     }
     var requestOptions = {
@@ -42,6 +43,31 @@ const LoginScreen = () => {
       navigation.navigate("Home")
     }
   }
+
+  // const sendLoginRequest = async (email, password) => {
+  //   var requestOptions = {
+  //     method: 'POST',
+  //     headers: {
+  //         "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({ email: userEmail.toLowerCase() })
+  //   };
+  //   try {
+  //       // Your code to build the request and send it
+  //       const response = await makeHTTPRequest(requestOptions, process.env.EXPO_PUBLIC_API_BASE_URL + "api/login");
+
+  //       // Handle the response
+  //       if (response && response.email) {
+  //           AsyncStorage.setItem('user_email', response.email);
+  //           navigation.navigate("Home")
+  //       } else {
+  //           alert("Login failed");
+  //       }
+  //   } catch (error) {
+  //       console.error('Error:', error);
+  //       alert("An error occurred during login.");
+  //   }
+  // }
 
   const sendSignupRequest = async () => {
     if (userName == null) {

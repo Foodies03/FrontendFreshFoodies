@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator();
 const InventoryNavigator = () => {
     return (
         <Stack.Navigator initialRouteName="Storage" screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Storage" component={StorageScreen}/>
+            <Stack.Screen name="Storage Navigation" component={StorageScreen}/>
             <Stack.Screen name="Inventory" component={InventoryScreen}/>
         </Stack.Navigator>
     )

@@ -20,13 +20,13 @@ export const makeHTTPRequest = async (requestOptions, url) => {
 
     response = await response.json();
 
-    console.log("request succeeded, response: " + JSON.stringify(response))
+    // console.log("request succeeded, response: " + JSON.stringify(response))
     return response
 }
 
 export const getUserPersonalFridgeObject = async () => {
     let fridgeIds = await getUserFridgeIds();
-    let personalFridgeId = fridgeIds[0]
+    let personalFridgeId = fridgeIds[0];
     var requestOptions = {
         method: 'GET',
         headers: {
@@ -39,7 +39,7 @@ export const getUserPersonalFridgeObject = async () => {
         alert("failed to get your fridge.")
         return;
       }
-      console.log(JSON.stringify(response));
+      // console.log(JSON.stringify(response));
       return response;
 }
 
@@ -59,7 +59,7 @@ export const getUserFridgeIds = async () => {
     alert("failed to get your login info.")
     return;
   }
-  console.log("api/me response: " + JSON.stringify(response));
+  // console.log("api/me response: " + JSON.stringify(response));
   return response.fridge_ids
 }
 
@@ -81,7 +81,7 @@ export const getUserSharedFridgeObject = async () => {
       alert("failed to get your fridge.")
       return;
     }
-    console.log(JSON.stringify(response));
+    // console.log(JSON.stringify(response));
     return response;
 }
 
@@ -149,7 +149,7 @@ export const addOrRemoveFoodFromFridge = async (fridgeId, foodArray, action) => 
     alert("failed to add or remove foods")
     return
   }
-  console.log(JSON.stringify(response))
+  // console.log(JSON.stringify(response))
   return response;
 }
 
@@ -174,5 +174,72 @@ export const createFridge = async (email, slug) => {
     return;
   }
 
-  console.log("fridge creation succeeded, response: " + JSON.stringify(response))
+  // console.log("fridge creation succeeded, response: " + JSON.stringify(response))
 }
+
+export const getRecommendedRecipes = async (fridgeId, category) => {
+
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const response = await makeHTTPRequest(requestOptions, process.env.EXPO_PUBLIC_API_BASE_URL + "api/fridge/" + fridgeId + "/recommended_recipes?category=" + category);
+    if (response === null) {
+      alert('Failed to get recommended recipes.');
+      return null;
+    }
+    return response;
+  } catch (error) {
+    console.error('Error fetching recommended recipes:', error.message);
+    return null;
+  }
+};
+
+export const getRecipeDetails = async (fridgeId, recipeId) => {
+  const url = process.env.EXPO_PUBLIC_API_BASE_URL + "api/fridge/" + fridgeId + "/recipes/" + recipeId;
+  const requestOptions = {
+      method: 'GET',
+      headers: {
+          "Content-Type": "application/json"
+      }
+  };
+
+  try {
+      const response = await makeHTTPRequest(requestOptions, url);
+      if (response === null) {
+          console.log("Failed to fetch recipe details.");
+          return null;
+      }
+      return response;
+  } catch (error) {
+      console.error("Error fetching recipe details:", error.message);
+      return null;
+  }
+};
+
+export const sendServingsToBackend = async (servings, fridgeId, recipeId) => {
+  const url = process.env.EXPO_PUBLIC_API_BASE_URL + "api/fridge/" + fridgeId + "/recipes/" + recipeId + "/servings";
+  const requestOptions = {
+      method: 'POST',
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ servings, recipeId }),
+  };
+
+  try {
+      const response = await makeHTTPRequest(requestOptions, url);
+      if (response === null) {
+          console.log("Failed to send servings to server.");
+          return null;
+      }
+      return response;
+  } catch (error) {
+      console.error("Error sending servings to server:", error.message);
+      return null;
+  }
+};
