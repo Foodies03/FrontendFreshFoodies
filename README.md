@@ -1,6 +1,6 @@
 # LookingGlass
 
-While working on the continuation of LookingGlass, we were asked to add food waste reports, incorporate facts related to food waste, and add more customization for privacy settings/notifications. Our focus was on encouraging the reduction of food waste by encouraging both a collaborative effort, between roommates, as well as an individual effort through personal analytics. What we have contributed is the analytics feature that provides individuals with specific quantitative data regarding their food waste habits. Currently, this feature provides data over a span of a time period, but improvements can be made by 
+While working on the continuation of LookingGlass, we were asked to add food waste reports, incorporate facts related to food waste, and add more customization for privacy settings/notifications. Our focus was on encouraging the reduction of food waste by encouraging both a collaborative effort, between roommates, as well as an individual effort through personal analytics. What we have contributed is the analytics feature that provides individuals with specific quantitative data regarding their food waste habits.
 
 
 In order to continue enforcing food waste reduction, we believe that implementing educational resources and other features that will help the user improve their food waste reduction habits will elevate the project. Another way to improve the platform would be to add more customization to encourage user engagement.
